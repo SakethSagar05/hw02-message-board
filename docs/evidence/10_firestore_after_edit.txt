@@ -1,0 +1,4 @@
+// runQuery messages orderBy createdAt as alice.11211832@example.com: HTTP 200, 3 documents
+{"id": "vIivI1AHHXGXfMTp9iVx", "authorUid": "r2jk00eyqZUZpmVoaoCZgqfHnar1", "authorName": "Alice Adams", "text": "Alice message one", "createdAt": "2026-11-21T23:34:22.736Z"}
+{"id": "XnAkPRetxyAkmyRu5iuF", "authorUid": "r2jk00eyqZUZpmVoaoCZgqfHnar1", "authorName": "Alice Adams", "createdAt": "2026-11-21T23:34:33.101Z", "editedAt": "2026-11-21T23:35:05.853Z", "text": "Alice message two edited"}
+{"id": "U2NrFwa9UZo86kqvdJkT", "authorUid": "r2jk00eyqZUZpmVoaoCZgqfHnar1", "authorName": "Alice Adams", "text": "Alice message three", "createdAt": "2026-11-21T23:34:43.841Z"}

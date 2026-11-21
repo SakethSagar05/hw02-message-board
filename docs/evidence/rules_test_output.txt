@@ -1,0 +1,96 @@
+
+> test
+> firebase emulators:exec --only firestore --project demo-hw02 --config ../firebase.json "node --test test/rules.test.js"
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-hw02", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node --test test/rules.test.js
+▶ messages: read
+  ✔ signed-out read is denied (307.380084ms)
+  ✔ any signed-in user can read the board (79.10575ms)
+✔ messages: read (978.057042ms)
+▶ messages: create
+  ✔ correct author with server timestamp is allowed (65.731459ms)
+[2026-11-21T23:29:51.753Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108c7 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L65:24 for 'create' @ L65, evaluation error at L79:24 for 'update' @ L79, false for 'create' @ L65
+  ✔ forged authorUid is denied (30.061666ms)
+[2026-11-21T23:29:51.779Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108c8 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L65, false for 'update' @ L79
+  ✔ signed-out create is denied (24.839042ms)
+[2026-11-21T23:29:51.807Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108c9 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L65, evaluation error at L79:24 for 'update' @ L79, false for 'create' @ L65
+  ✔ device-clock createdAt is denied (29.480041ms)
+[2026-11-21T23:29:51.836Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108ca error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L65:24 for 'create' @ L65, evaluation error at L79:24 for 'update' @ L79, false for 'create' @ L65
+  ✔ empty or whitespace-only text is denied (26.898292ms)
+[2026-11-21T23:29:51.859Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108cb error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L65:24 for 'create' @ L65, evaluation error at L79:24 for 'update' @ L79, false for 'create' @ L65
+  ✔ text over 500 characters is denied (24.489167ms)
+[2026-11-21T23:29:51.884Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108cc error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L65:24 for 'create' @ L65, evaluation error at L79:24 for 'update' @ L79, false for 'create' @ L65
+  ✔ extra fields are denied (24.382833ms)
+✔ messages: create (226.445708ms)
+▶ messages: update
+  ✔ owner can edit text with editedAt = server time (51.841542ms)
+[2026-11-21T23:29:51.972Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108d0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L79:24 for 'update' @ L79, false for 'update' @ L79
+  ✔ another signed-in user cannot edit (35.875667ms)
+[2026-11-21T23:29:52.009Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108d2 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L79:24 for 'update' @ L79, false for 'update' @ L79
+  ✔ owner cannot change authorUid (37.01375ms)
+[2026-11-21T23:29:52.043Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108d4 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L79:24 for 'update' @ L79, false for 'update' @ L79
+  ✔ owner cannot rewrite createdAt (34.0475ms)
+[2026-11-21T23:29:52.080Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108d6 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L79:24 for 'update' @ L79, false for 'update' @ L79
+  ✔ owner cannot blank the text (36.565792ms)
+✔ messages: update (195.65075ms)
+▶ messages: delete
+  ✔ owner can delete (30.429334ms)
+[2026-11-21T23:29:52.149Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108da error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L87:24 for 'delete' @ L87, false for 'delete' @ L87
+  ✔ another signed-in user cannot delete (40.201208ms)
+[2026-11-21T23:29:52.183Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108dc error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L87
+  ✔ signed-out delete is denied (32.662833ms)
+✔ messages: delete (103.539416ms)
+▶ users/{uid}: private record
+  ✔ owner creates the record with exactly the five fields (28.349167ms)
+[2026-11-21T23:29:52.233Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108de error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L33, false for 'update' @ L45
+  ✔ creating someone else's record is denied (20.52575ms)
+[2026-11-21T23:29:52.258Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108df error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L33:24 for 'create' @ L33, evaluation error at L45:24 for 'update' @ L45, false for 'create' @ L33
+[2026-11-21T23:29:52.276Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108e0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L33:24 for 'create' @ L33, evaluation error at L45:24 for 'update' @ L45, false for 'create' @ L33
+  ✔ a missing field or an extra field is denied (43.387917ms)
+[2026-11-21T23:29:52.298Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108e1 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L33:24 for 'create' @ L33, evaluation error at L45:24 for 'update' @ L45, false for 'create' @ L33
+  ✔ an unknown role is denied (roles never grant access) (21.571916ms)
+  ✔ owner reads own record; others and signed-out users cannot (65.050417ms)
+[2026-11-21T23:29:52.396Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108e7 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L33:24 for 'create' @ L33, evaluation error at L45:24 for 'update' @ L45, false for 'update' @ L45
+[2026-11-21T23:29:52.413Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108e8 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L45:24 for 'update' @ L45, false for 'update' @ L45
+  ✔ owner cannot reset the registration time or change role (68.585458ms)
+[2026-11-21T23:29:52.468Z]  @firebase/firestore: Firestore (13.4.0): GrpcConnection RPC 'Write' stream 0x793108eb error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L51
+  ✔ records cannot be deleted from the client (36.487083ms)
+  ✔ prefs are owner-only (34.4865ms)
+✔ users/{uid}: private record (318.927833ms)
+ℹ tests 25
+ℹ suites 5
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2056.908458
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

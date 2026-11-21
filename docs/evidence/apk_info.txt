@@ -1,0 +1,6 @@
+Built: Sat Nov 21 18:23:26 EST 2026
+-rw-r--r--@ 1 sakethsagar  staff  52382473 Nov 21 18:23 build/app/outputs/flutter-apk/app-release.apk
+acb73a9d90d6f220edb27555648f5f6ad03ab0539545934d506aac44fa157ea3  build/app/outputs/flutter-apk/app-release.apk
+Device: sdk_gphone16k_arm64
+Performing Streamed Install
+Success

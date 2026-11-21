@@ -1,0 +1,6 @@
+// PATCH messages/vIivI1AHHXGXfMTp9iVx as bob.11211832@example.com (not the author): HTTP 403
+{
+  "code": 403,
+  "message": "Missing or insufficient permissions.",
+  "status": "PERMISSION_DENIED"
+}

@@ -36,3 +36,12 @@ ui-debug.log
 
 # Big binaries live in the LMS submission, not the repo
 submission/*.apk
+
+# HW02 local-only
+docs/_preview/
+docs/evidence/test_accounts.txt
+submission/*.apk
+rules-tests/node_modules/
+*.log.bak
+firestore-debug.log
+rules-tests/firestore-debug.log

@@ -59,7 +59,7 @@ tap() {  # tap "label" [find|field] [index]  (scrolls if needed)
   for try in 1 2 3 4 5 6; do
     if p="$(pos_of "$@")"; then
       x="${p% *}"; y="${p#* }"
-      if [ "$y" -gt $((H * 93 / 100)) ]; then up; continue; fi
+      if [ "$y" -gt $((H * 97 / 100)) ]; then up; continue; fi
       adb shell input tap "$x" "$y"; echo "    tapped \"$1\" at $x,$y"; sleep 1; return 0
     fi
     if [ $try -le 3 ]; then up; else down; fi

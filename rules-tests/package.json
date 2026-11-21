@@ -4,8 +4,8 @@
   "type": "module",
   "description": "Extra Spice #2: automated Firestore security-rules tests (run against the Firestore emulator).",
   "scripts": {
-    "test": "firebase emulators:exec --only firestore --project demo-hw02 --config ../firebase.json \"node --test test/\"",
-    "test:direct": "node --test test/"
+    "test": "firebase emulators:exec --only firestore --project demo-hw02 --config ../firebase.json \"node --test test/rules.test.js\"",
+    "test:direct": "node --test test/rules.test.js"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^6.0.0",

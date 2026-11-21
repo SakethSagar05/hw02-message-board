@@ -1,0 +1,11 @@
+// GET users/r2jk00eyqZUZpmVoaoCZgqfHnar1 as alice.11211832@example.com: HTTP 200
+{
+  "name": "projects/vault-board-qjnocm/databases/(default)/documents/users/r2jk00eyqZUZpmVoaoCZgqfHnar1",
+  "fields": {
+    "role": "student",
+    "firstName": "Alice",
+    "registrationDateTime": "2026-11-21T23:34:09.055Z",
+    "lastName": "Adams",
+    "uid": "r2jk00eyqZUZpmVoaoCZgqfHnar1"
+  }
+}

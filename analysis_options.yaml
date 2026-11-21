@@ -4,6 +4,8 @@ analyzer:
   exclude:
     - lib/firebase_options.dart
     - build/**
+    - android/**
+    - web/**
 
 linter:
   rules:

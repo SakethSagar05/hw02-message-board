@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "59715996947",
+    "project_id": "vault-board-qjnocm",
+    "storage_bucket": "vault-board-qjnocm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59715996947:android:549f3203b230a02fb75ee6",
+        "android_client_info": {
+          "package_name": "edu.gsu.csc4360.message_board"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJkYvnLx9439E2tv11n2Hix2lJKLY8xrk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
