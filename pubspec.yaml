@@ -1,0 +1,24 @@
+name: message_board
+description: "CSC 4360 Homework 02: Vault Board, a Firebase message board (Auth, Firestore user records, message CRUD with a live stream, security rules)."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  # Same Firebase baseline as the earlier in-class activities on this machine.
+  firebase_core: ^5.1.0
+  firebase_auth: ^7.0.1
+  cloud_firestore: ^7.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
