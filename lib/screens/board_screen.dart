@@ -349,7 +349,7 @@ class _MessageTile extends StatelessWidget {
                 // the security rules are what actually stop other users.
                 if (mine)
                   PopupMenuButton<String>(
-                    tooltip: 'Message options',
+                    tooltip: 'Message options: ${_preview(m.text)}',
                     onSelected: (v) => v == 'edit' ? onEdit() : onDelete(),
                     itemBuilder: (_) => const [
                       PopupMenuItem(value: 'edit', child: Text('Edit')),
