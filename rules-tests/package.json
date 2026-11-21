@@ -1,0 +1,14 @@
+{
+  "name": "vault-board-rules-tests",
+  "private": true,
+  "type": "module",
+  "description": "Extra Spice #2: automated Firestore security-rules tests (run against the Firestore emulator).",
+  "scripts": {
+    "test": "firebase emulators:exec --only firestore --project demo-hw02 --config ../firebase.json \"node --test test/\"",
+    "test:direct": "node --test test/"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
+    "firebase": "^13.0.0"
+  }
+}
