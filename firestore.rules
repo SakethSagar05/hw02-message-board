@@ -1,0 +1,91 @@
+rules_version = '2';
+
+// Vault Board security rules. These encode the writer table in README.md:
+//   users/{uid}                 private, written once by its owner
+//   users/{uid}/prefs/{doc}     private, owner only
+//   messages/{msgId}            public to signed-in users; owner-only edit/delete
+// Anything not matched below is denied by default.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isUser(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function validName(n) {
+      return n is string && n.trim().size() > 0 && n.size() <= 50;
+    }
+
+    function validText(t) {
+      return t is string && t.trim().size() > 0 && t.size() <= 500;
+    }
+
+    // ---------------------------------------------------------------- users
+    match /users/{uid} {
+      allow read: if isUser(uid);
+
+      // Created once at registration with exactly the five required fields.
+      // The role is descriptive only and is never used to grant access.
+      allow create: if isUser(uid)
+        && request.resource.data.keys().hasOnly(
+             ['uid', 'firstName', 'lastName', 'role', 'registrationDateTime'])
+        && request.resource.data.keys().hasAll(
+             ['uid', 'firstName', 'lastName', 'role', 'registrationDateTime'])
+        && request.resource.data.uid == uid
+        && validName(request.resource.data.firstName)
+        && validName(request.resource.data.lastName)
+        && request.resource.data.role in ['student', 'instructor', 'guest']
+        && request.resource.data.registrationDateTime == request.time;
+
+      // Owners may fix their name; uid, role and the registration time stay.
+      allow update: if isUser(uid)
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['firstName', 'lastName'])
+        && validName(request.resource.data.firstName)
+        && validName(request.resource.data.lastName);
+
+      allow delete: if false;
+
+      // Notification preferences (opt-in flag, device token): owner only.
+      match /prefs/{doc} {
+        allow read, write: if isUser(uid);
+      }
+    }
+
+    // ------------------------------------------------------------- messages
+    match /messages/{msgId} {
+      // Public board: any signed-in user reads; signed-out reads are denied.
+      allow read: if signedIn();
+
+      // Create: the writer must sign as themselves, with the server clock.
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(
+             ['text', 'authorUid', 'authorName', 'createdAt'])
+        && request.resource.data.keys().hasAll(
+             ['text', 'authorUid', 'authorName', 'createdAt'])
+        && request.resource.data.authorUid == request.auth.uid
+        && validText(request.resource.data.text)
+        && request.resource.data.authorName is string
+        && request.resource.data.authorName.size() > 0
+        && request.resource.data.authorName.size() <= 101
+        && request.resource.data.createdAt == request.time;
+
+      // Update: only the stored author, and only text + editedAt may change
+      // (never the owner, the author name or the creation time).
+      allow update: if signedIn()
+        && resource.data.authorUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['text', 'editedAt'])
+        && validText(request.resource.data.text)
+        && request.resource.data.editedAt == request.time;
+
+      // Delete: only the stored author.
+      allow delete: if signedIn()
+        && resource.data.authorUid == request.auth.uid;
+    }
+  }
+}
