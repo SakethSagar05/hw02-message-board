@@ -201,17 +201,53 @@ the rules test suite in CI so a rule change can never reopen Case File 1.
 
 ## AI Lab (undergraduate: Flow & Lifetime Showdown)
 
-**My five survival predictions (before AI):** *YOURS. Write these yourself (2 minutes).
-For example, what happens to: being signed in after an app kill / after a reboot / after
-clearing app data; the messages after clearing app data; a half-typed draft after an app
-kill.*
+**My survival predictions (made before checking with AI or testing):**
+1. Force-kill the app and reopen it: I expected to be **signed out**.
+2. Reboot the phone and reopen the app: I expected to be **still signed in**.
+3. Clear app data in Android Settings: I expected to be **signed out**, with my **messages coming back** from Firestore after signing in.
+4. Half-typed message, then force-kill: I expected the **draft to be kept**.
+5. Flow: splash while Firebase starts, then sign-in/registration, then the board. Signed-out users never see the board.
 
-**AI tool, date, summary:** Claude (Anthropic), 11/21/2026. It explained the
-splash → authStateChanges() → profile gate → board flow; `get()` as one-time and
-`snapshots()` as live; and server timestamps for cross-device ordering. It suggested tests
-for invalid input, signed-out read, cross-user edit, and double-tap. [Add one claim you
-doubted.]
+**AI tool, date, summary:** Claude (Anthropic), 11/21/2026. It described the flow as
+splash → `authStateChanges()` → profile gate → board. It said `get()` reads once and
+`snapshots()` stays live, and that server timestamps keep ordering correct across
+devices. It said the Firebase Auth session is stored on the device, so it survives an app
+kill and a reboot. It said that clearing app data deletes that session and Firestore's
+local cache but not the data on the server. It suggested tests for invalid input,
+signed-out read, cross-user edit, and double-tap.
 
-**Compare, verify, decide:** [Which predictions matched; the doubtful claim; how you
-settled it, e.g. the kill-and-relaunch test (screenshot 20) or the Firebase Auth
-persistence docs: https://firebase.google.com/docs/auth/flutter/start.]
+**The claim I doubted:** "Clearing app data signs you out, but your messages come back
+from Firestore." I was not sure "clear data" would leave the messages alone, because the
+app also keeps a local Firestore cache.
+
+**Compare, verify, decide.** I tested all four predictions on the release APK with a
+script (`Verify Predictions.command`, log in `docs/evidence/ai_lab_predictions.log`,
+screenshots AI_1–AI_4b):
+
+| Prediction | Observed | Who was right |
+|---|---|---|
+| Kill → signed out | Still signed in (AI_2) | AI; my prediction was wrong |
+| Reboot → signed in | Still signed in (AI_3) | Both |
+| Clear data → signed out, messages back | Signed out (AI_4a); after signing in, Bob's message was back (AI_4b) | Both; my doubted claim was confirmed |
+| Draft kept after kill | Draft lost (AI_1 vs AI_2) | My prediction was wrong |
+
+The experiment settled the doubted claim: clearing app data removed only what was on the
+device (the Auth session and the cache). The messages live in Firestore, so they came
+back as soon as I signed in. That matches the Firebase docs. Firestore's offline cache is
+a local copy, not the source of truth
+(https://firebase.google.com/docs/firestore/manage-data/enable-offline). Auth state on
+Android is persisted to disk until sign-out
+(https://firebase.google.com/docs/auth/flutter/start).
+
+I was wrong twice. The session survives an app kill for the same reason it survives a
+reboot: it is saved to disk, not kept in memory. Treating "kill" and "reboot" differently
+was inconsistent of me. The draft was lost because the composer text lives only in a
+`TextEditingController` in memory, and nothing writes it to disk.
+
+**Decision:** I kept the AI's flow and the session behavior (both verified). I did not add
+draft saving tonight, but it is a cheap improvement: save the composer text to
+`shared_preferences` on change and clear it after a successful post. A lost draft costs
+the user little, so I left it as a documented limitation. **Flow Referee:** confirmed AI
+statement: "the session survives an app kill" (test 20 and AI_2). Corrected statement: my
+own assumption that a draft survives a kill. No AI claim I tested was contradicted, so I
+am not claiming the AI Mythbuster badge.

@@ -172,6 +172,20 @@ def add_markdown(doc, md, fills):
             while j < len(lines) and not lines[j].startswith("```"):
                 buf.append(lines[j]); j += 1
             mono_block(doc, "\n".join(buf)); i = j + 1; continue
+        if line.startswith("|"):
+            rows = []
+            while i < len(lines) and lines[i].startswith("|"):
+                cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
+                if not all(re.fullmatch(r":?-+:?", c) for c in cells):
+                    rows.append(cells)
+                i += 1
+            t = doc.add_table(rows=0, cols=len(rows[0])); t.style = "Light Grid Accent 1"
+            for r in rows:
+                cs = t.add_row().cells
+                for c, v in zip(cs, r):
+                    add_runs(c.paragraphs[0], v)
+            doc.add_paragraph()
+            continue
         if line.startswith("# "):
             i += 1; continue  # draft title, skip
         if line.startswith("## "):
@@ -354,8 +368,26 @@ def main():
     for h, body in spices:
         doc.add_heading(h, level=2); add_runs(doc.add_paragraph(), body)
 
+    # ---------- AI lab experiment
+    ai_log = read(os.path.join(EVID, "ai_lab_predictions.log"))
+    if ai_log:
+        doc.add_heading("5. AI Lab experiment: survival predictions tested on the release APK", level=1)
+        obs = [l.strip() for l in ai_log.splitlines() if "OBSERVED" in l]
+        for l in obs:
+            doc.add_paragraph(l.replace("OBSERVED: ", "Observed: "), style="List Bullet")
+        caps = [("AI_1_draft_before_kill", "Draft typed, not posted"), ("AI_2_after_kill", "After force-kill: signed in, draft gone"),
+                ("AI_3_after_reboot", "After reboot: still signed in"), ("AI_4a_after_clear_data", "After Clear app data: signed out"),
+                ("AI_4b_signed_back_in", "Signed back in: message restored from Firestore")]
+        caps = [(f, c) for f, c in caps if os.path.exists(os.path.join(EVID, f + ".png"))]
+        for k in range(0, len(caps), 3):
+            chunk = caps[k:k + 3]
+            tbl = doc.add_table(rows=2, cols=len(chunk)); tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+            for j, (f, c) in enumerate(chunk):
+                tbl.rows[0].cells[j].paragraphs[0].add_run().add_picture(os.path.join(EVID, f + ".png"), width=Inches(1.9))
+                cr = tbl.rows[1].cells[j].paragraphs[0].add_run(f"Figure {fig}: {c}"); cr.italic = True; cr.font.size = Pt(8.5)
+                fig += 1
     # ---------- written sections
-    doc.add_heading("5. Case files, reflection and AI Lab", level=1)
+    doc.add_heading("6. Case files, reflection and AI Lab", level=1)
     draft = read(os.path.join(ROOT, "docs", "WRITTEN_DRAFT.md")) or ""
     draft = re.sub(r"^Items in \[BRACKETS\].*?\n\n", "", draft, flags=re.S | re.M)
     fills = {
@@ -368,7 +400,7 @@ def main():
     }
     add_markdown(doc, draft, fills)
 
-    doc.add_heading("6. Sources checked", level=1)
+    doc.add_heading("7. Sources checked", level=1)
     for s in [
         "Firebase Authentication for Flutter: https://firebase.google.com/docs/auth/flutter/start",
         "Cloud Firestore: add/update/delete data: https://firebase.google.com/docs/firestore/manage-data/add-data",
@@ -377,6 +409,7 @@ def main():
         "Security rules and rules unit testing: https://firebase.google.com/docs/firestore/security/test-security-rules",
         "Offline data: https://firebase.google.com/docs/firestore/manage-data/enable-offline",
         "Flutter Android release builds: https://docs.flutter.dev/deployment/android",
+        "AI assistance: Claude (Anthropic), 11/21/2026, used for code, rules, tests and draft review; all behaviour verified by the tests above.",
     ]:
         doc.add_paragraph(s, style="List Bullet")
 

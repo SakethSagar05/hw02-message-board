@@ -1,0 +1,25 @@
+
+==> Start: open the app (Bob should still be signed in from the capture run)
+    not signed in; signing in as bob.11211832@example.com
+    signed in as Bob
+
+==> Prediction 1 + 2: type a draft (do not post), then force-kill and relaunch
+    saved docs/evidence/AI_1_draft_before_kill.png
+    saved docs/evidence/AI_2_after_kill.png
+    OBSERVED: still signed in after app kill
+    OBSERVED: draft lost after app kill
+
+==> Prediction 3: reboot the emulator, then open the app
+    saved docs/evidence/AI_3_after_reboot.png
+    OBSERVED: still signed in after reboot
+
+==> Prediction 4: Clear app data (adb shell pm clear), then open the app
+Success
+    saved docs/evidence/AI_4a_after_clear_data.png
+    OBSERVED: signed out after clearing data
+    signing back in as Bob to check the messages
+    saved docs/evidence/AI_4b_signed_back_in.png
+    OBSERVED: messages came back from Firestore after clearing data
+
+==> Done
+Press Return to close.
